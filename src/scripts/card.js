@@ -1,7 +1,5 @@
-
-import { placesList } from "./modal";
-
-function createCard(cardContent, cardRemove, likeToggle) {
+// генерация карточек
+function createCard(cardContent, deleteCard, likeToggle, openImageToggle) {
   const cardTemplate = document.querySelector('#card-template').content;
   const cardItem = cardTemplate.querySelector('.card').cloneNode(true);
 
@@ -9,35 +7,31 @@ function createCard(cardContent, cardRemove, likeToggle) {
   const cardTitle = cardItem.querySelector('.card__title')
   const deleteButton = cardItem.querySelector('.card__delete-button');
   const cardLikeButton = cardItem.querySelector('.card__like-button');
+  const placesList = document.querySelector('.places__list');
 
   cardImage.setAttribute('src', cardContent.link);
   cardImage.setAttribute('alt', cardContent.name);
   cardTitle.textContent = cardContent.name;
 
-  deleteButton.addEventListener('click', function () {
-    cardRemove(cardItem);
+  deleteButton.addEventListener('click', () => {
+    deleteCard(cardItem);
   });
-
   cardLikeButton.addEventListener('click', likeToggle);
-
+  placesList.addEventListener('click', openImageToggle);
   return(cardItem);
 };
 
-// вставка карточек /начало-конец/
-function insertCard(item, method = "prepend") {
-  const cardItem = createCard(item, deleteCard, pressLike);
-  placesList[ method ](cardItem);
-};
-
-function deleteCard(card) {
+// удаление карточки
+function removeCard(card) {
   card.remove();
 }
 
+// обработка like
 function pressLike (evt) {
   evt.target.classList.toggle('card__like-button_is-active');
 }
 
-export { createCard, insertCard, deleteCard, pressLike};
+export { createCard, removeCard, pressLike };
 
 
 
