@@ -34,9 +34,6 @@ export const deleteCardAPI = (cardId) => {
   return fetch(`${config.baseUrl}/cards/${cardId}`, {
     method: 'DELETE',
     headers:  config.headers,
-    body: JSON.stringify({
-      _id: cardId
-    })
   })
   .then(handleResponse)
 }
@@ -59,9 +56,6 @@ export const putLike = (cardId) => {
   return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
     method: 'PUT',
     headers: config.headers,
-    body: JSON.stringify({
-      _id: cardId
-    })
   })
   .then(handleResponse)
 }
@@ -71,9 +65,6 @@ export const deleteLike = (cardId) => {
   return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
     method: 'DELETE',
     headers: config.headers,
-    body: JSON.stringify({
-      _id: cardId
-    })
   })
   .then(handleResponse)
 }

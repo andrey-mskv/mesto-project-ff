@@ -1,6 +1,6 @@
 import '../pages/index.css';
 import {closePopup, openPopup} from './modal.js';
-import {createCard, deleteCard, setCount} from './card.js';
+import {createCard, deleteCard, updateLike, statusLikeBtn} from './card.js';
 import {getCards,
         getUser,
         deleteCardAPI,
@@ -9,11 +9,11 @@ import {getCards,
         deleteLike,
         editUser,
         editAvatar
-       } from './api.js';
+        } from './api.js';
 import {enableValidation,
-        clearValidation,
-        config
-       } from './validation.js';
+        clearValidation
+        } from './validation.js';
+import {config} from './validationConfig.js'
 
 // кнопки "редактировать", "добавить", "закрыть"
 const editButton = document.querySelector('.profile__edit-button');
@@ -62,7 +62,6 @@ addButton.addEventListener('click', function() {
   clearValidation(popupNewCard, config);
   openPopup(popupNewCard);
 });
-
 
 // слушатель на кнопке АВАТАР
 avatarButton.addEventListener('click', function() {
@@ -124,13 +123,10 @@ newPlace.addEventListener('submit', newPlaceFormSubmit);
 function newPlaceFormSubmit(evt){
   evt.preventDefault(); // сброс стандартного поведения кнопки
   renderLoad(true, evt.target); // "спиннер"
-  const newCard = {
-    name: newPlace.placeName.value,
-    link: newPlace.link.value,
-  };
-  postCard(newCard.name, newCard.link)
+ 
+  postCard(newPlace.placeName.value, newPlace.link.value)
   .then((card) => {
-    const cardItem = createCard(card, card.owner, showImage, removeCard, disLike, setLike);
+    const cardItem = createCard(card, card.owner, showImage, hdc, hlb);
     placesList.prepend(cardItem);
     newPlace.reset();
     closePopup(popupNewCard);
@@ -166,11 +162,7 @@ popups.forEach((item) => {
 
 // "Спиннер"
 function renderLoad(isLoad, form) {
-  if(isLoad) {
-    form.button.textContent = 'Сохранение...';
-  } else {
-    form.button.textContent = 'Сохранить';
-  }
+  form.button.textContent = isLoad ? 'Сохранение...' : 'Сохранить'; // Условный (тернарный) оператор
 };
 
 // первоначальная загрузка cards & user
@@ -185,35 +177,38 @@ Promise.all([
   profileAvatar.style.background = `url(${user.avatar}) center / cover`;
   // цикл массива данных карточек
   cards.forEach((card) => {
-    const cardItem = createCard(card, user, showImage, removeCard, disLike, setLike);
+    const cardItem = createCard(card, user, showImage, hdc, hlb);
     placesList.append(cardItem);
   })
 })
 .catch((err) => console.log(err));
 
 // удаление карточки
-const removeCard = (item, cardId) => {
+// hdc - handler of delete button of card
+const hdc = (item, cardId) => {
   deleteCardAPI(cardId._id)
   .then((data) => deleteCard(item, data.message))
   .catch((err) => console.log(err));
 }
 
-const setLike = (evt, cardId) => {
-  // console.log('лайк')
-  putLike(cardId)
-  .then((data) => {
-    setCount(evt, data.likes.length);
-  })
-  .catch((err) => console.log(err));
-}
+// обновление obj.likes.Array
+// hlb - handler of like button
+const hlb = (btn, cardId) => {
+  if(statusLikeBtn(btn)) {
+    deleteLike(cardId)
+    .then((data) => {
+      updateLike(btn, data);
+      console.log('дизлайк \n' + 'счетчик: ' + data.likes.length);
+    })
+    .catch((err) => console.log(err));
+  } else {
+    putLike(cardId)
+    .then((data) => {
+      updateLike(btn, data);
+      console.log('лайк \n' + 'счетчик: ' + data.likes.length);
+    })
+    .catch((err) => console.log(err));
+  }
+};
 
-const disLike = (evt, cardId) => {
-  // console.log('дизлайк')
-  deleteLike(cardId)
-  .then((data) => {
-    setCount(evt, data.likes.length);
-  })
-  .catch((err) => console.log(err));
-}
-
-enableValidation();
+enableValidation(config); 

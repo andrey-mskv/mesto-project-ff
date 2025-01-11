@@ -1,4 +1,4 @@
-export function createCard(cardContent, user, showImage, remove, disLike, setLike) {
+export function createCard(cardContent, user, showImage, hdc, hlb) {
 
   const cardTemplate = document.querySelector('#card-template').content;
 
@@ -17,45 +17,38 @@ export function createCard(cardContent, user, showImage, remove, disLike, setLik
   if (cardContent.owner._id !== user._id) {
     deleteButton.style.display = 'none';
     deleteButton.disabled = true;
+  } else {
+    deleteButton.addEventListener('click', () => hdc(cardItem, cardContent));
   };
 
   // Проверка userID у LIKE
   const matchUserId = cardContent.likes.some((id) => {return id._id === user._id});
   if (matchUserId) {
     likeButton.classList.add('card__like-button_is-active');
-  } else {
-    likeButton.classList.remove('card__like-button_is-active');
-  }
+  };
 
+  // Обновление счетчиков
   likeCount.textContent = cardContent.likes.length;
 
-  deleteButton.addEventListener('click', () => remove(cardItem, cardContent));
-
-  likeButton.addEventListener('click', (evt) => {
-    
-    if (evt.target.classList.contains('card__like-button_is-active')) {
-      disLike(evt.target, cardContent._id);
-      evt.target.classList.remove('card__like-button_is-active')
-    } else {
-      setLike(evt.target, cardContent._id);
-      evt.target.classList.add('card__like-button_is-active')
-    }
-  });
-  
+  likeButton.addEventListener('click', evt => hlb(evt.target, cardContent._id));
   cardImage.addEventListener('click', showImage);
 
   return cardItem;
 };
 
-// удаление карточки
+// Удаление карточки
 export function deleteCard(element, message) {
   element.remove();
   console.log(message);
 }
 
-// счетчик лайков
-export const setCount = (evt, count) => {
-  console.log(evt.nextElementSibling.textContent)
-  evt.nextElementSibling.textContent = count;
-}
+// Проверка наличия лайка
+export const statusLikeBtn = (likeBtn) => {
+  return likeBtn.classList.contains('card__like-button_is-active');
+};
 
+// Обновление состояния кнопки like и счетчика
+export const updateLike = (btn, count) => {
+  btn.classList.toggle('card__like-button_is-active')
+  btn.nextElementSibling.textContent = count.likes.length;
+}
