@@ -633,7 +633,29 @@ template {
   background-size: cover;
   background-position: center;
   margin: 0 29px 0 0;
-  background-image: url(images/avatar.6666407ac3aa5af1d5de.jpg);
+  background-color: rgb(10, 10, 10);
+}
+
+.profile__image-button {
+  width: 100%;
+  height: 100%;
+  /* border-radius: 50%; */
+  border: none;
+  background-color: rgb(0, 0, 0);
+  opacity: 0;
+  transition: opacity 0.6s;
+  display: block;
+}
+
+.profile__image-button:hover {
+  opacity: 0.8;
+}
+
+.profile__image-button-icon {
+  width: 26px;
+  height: 26px;
+  margin: 0 auto;
+  background: url(images/avatarEditIcon.93c771f5f8582261951d.png) center / cover;
 }
 
 @media screen and (max-width: 740px) {
@@ -647,6 +669,8 @@ template {
     margin-right: 0;
   }
 }
+
+
 
 .profile {
   font-family: 'Inter', Arial, sans-serif;
@@ -695,6 +719,7 @@ template {
   align-items: center;
   background: #fff;
   padding: 25px 20px;
+  
 }
 
 .card__image {
@@ -728,6 +753,17 @@ template {
   opacity: 0.6;
 }
 
+.card__like-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+  position: absolute;
+  right: 20px;
+  bottom: 18px;
+  gap: 5px;
+}
 .card__like-button_is-active {
   background: transparent url(images/like-active.75438e944a43e4c0b404.svg) no-repeat;
 }
@@ -756,6 +792,9 @@ template {
   opacity: 0.6;
 }
 
+.card__delete-button-invisible {
+  display: none;
+}
 .card__title {
   max-width: 220px;
   font-size: 24px;
@@ -779,7 +818,7 @@ template {
 .popup__content {
   max-width: 430px;
   width: 100%;
-  min-height: 330px;
+  /* min-height: 330px; */
   background-color: #fff;
   border-radius: 10px;
   position: relative;
@@ -861,11 +900,48 @@ template {
   line-height: 18px;
   box-sizing: border-box;
   padding: 10px 0 0;
-  margin-bottom: 10px;
+  /* margin-bottom: 10px; */
 }
 
 .popup__input:last-of-type {
   margin-bottom: 0;
+}
+
+/* .popup__input:invalid {
+  border-bottom: 1px solid #FF0000;
+} */
+
+.popup__input_type_error {
+  border-bottom: 1px solid #FF0000;
+}
+
+.popup__input:focus {
+  outline: none;
+}
+
+.popup__form-field {
+  position: relative;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.popup__input-error {
+  display: none;
+  position: absolute;
+  font-size: 12px;
+  top: calc(100% + 6px);
+  left: 0;
+  color: rgb(68, 102, 196);
+  z-index: 1;
+}
+
+/* .popup__input-error:last-of-type {
+  top: 0;
+} */
+
+.popup__error_visible {
+  display: block;
+  color: red;
 }
 
 @media screen and (max-width: 568px) {
@@ -894,6 +970,13 @@ template {
 .popup__button:hover {
   background: rgba(0, 0, 0, 0.8);
   cursor: pointer;
+}
+
+.popup__button_disabled {
+  color: #C4C4C4;
+  background: none;
+  pointer-events: none;
+  outline: 1px solid #C4C4C4;
 }
 
 @media screen and (max-width: 568px) {
