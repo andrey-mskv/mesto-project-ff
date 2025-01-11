@@ -7,11 +7,48 @@
   line-height: 18px;
   box-sizing: border-box;
   padding: 10px 0 0;
-  margin-bottom: 10px;
+  /* margin-bottom: 10px; */
 }
 
 .popup__input:last-of-type {
   margin-bottom: 0;
+}
+
+/* .popup__input:invalid {
+  border-bottom: 1px solid #FF0000;
+} */
+
+.popup__input_type_error {
+  border-bottom: 1px solid #FF0000;
+}
+
+.popup__input:focus {
+  outline: none;
+}
+
+.popup__form-field {
+  position: relative;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.popup__input-error {
+  display: none;
+  position: absolute;
+  font-size: 12px;
+  top: calc(100% + 6px);
+  left: 0;
+  color: rgb(68, 102, 196);
+  z-index: 1;
+}
+
+/* .popup__input-error:last-of-type {
+  top: 0;
+} */
+
+.popup__error_visible {
+  display: block;
+  color: red;
 }
 
 @media screen and (max-width: 568px) {
